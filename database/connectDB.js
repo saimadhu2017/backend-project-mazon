@@ -1,21 +1,27 @@
 const dbconfig = require('./dbconfig');
 const { Connection } = require('tedious');
+const { unavailable, internalServErr } = require('../helpers/httpcodes');
 
-const connectDB = (callback) => {
+const connectDB = (callback, res) => {
     try {
         const connection = new Connection(dbconfig);
         connection.on('connect', (err) => {
             if (err) {
-                console.error("Can't connect DB... please check configuration of DB")
+                res.status(internalServErr.code).json({
+                    status: internalServErr.status,
+                    message: internalServErr.message
+                })
             }
             else {
-                console.log('successfully connected DB')
                 callback(connection)
             }
         })
         connection.connect();
     } catch (error) {
-        console.log('Error with connecting DB...');
+        res.status(unavailable.code).json({
+            status: unavailable.status,
+            message: unavailable.message
+        })
     }
 }
 

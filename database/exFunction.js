@@ -1,12 +1,14 @@
 const connectDB = require('./connectDB');
 const { Request } = require('tedious');
 
-const executeAPI = (sql) => {
+const executeAPI = (sql, onDone, onError, res) => {
     connectDB((connection) => {
         const rows = [];
+        let checkErrorInFetch = false;
         const request = new Request(sql, (err) => {
             if (err) {
-                console.log('Error in fetching the data');
+                checkErrorInFetch = true;
+                onError(err, res);
             }
             connection.close();
         });
@@ -20,15 +22,15 @@ const executeAPI = (sql) => {
         })
 
         request.on('requestCompleted', () => {
-            console.log('Successfully fecthed the data', rows);
+            if (!checkErrorInFetch) {
+                onDone(rows, res)
+            }
         })
 
         if (connection) {
-            console.log('First this will execute..');
             connection.execSql(request)
         }
-    });
+    }, res);
 }
 
-executeAPI('select * from users.customers');
 module.exports = executeAPI;
