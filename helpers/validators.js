@@ -16,3 +16,11 @@ exports.validateUser = (data) => {
     })
     return (userSchema.validate(data));
 }
+
+exports.validateSignInUser = (data) => {
+    const userSchema = Joi.object({
+        mail: Joi.string().email().required(),
+        password: Joi.string().pattern(new RegExp(passwordPattern)).required()
+    })
+    return (userSchema.validate(data));
+}

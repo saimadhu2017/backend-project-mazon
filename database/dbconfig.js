@@ -8,7 +8,7 @@ const dbconfig = {
         trustServerCertificate: true
     },
     authentication: {
-        type: "default",
+        type: process.env.DB_AUTH_TYPE,
         options: {
             userName: process.env.DB_USER_NAME,
             password: process.env.DB_PASSWORD

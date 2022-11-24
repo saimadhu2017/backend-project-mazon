@@ -1,7 +1,7 @@
 const connectDB = require('./connectDB');
 const { Request } = require('tedious');
 
-const executeAPI = (sql, onDone, onError, res) => {
+const executeAPI = (sql, onDone, onError, res, req) => {
     connectDB((connection) => {
         const rows = [];
         let checkErrorInFetch = false;
@@ -23,7 +23,7 @@ const executeAPI = (sql, onDone, onError, res) => {
 
         request.on('requestCompleted', () => {
             if (!checkErrorInFetch) {
-                onDone(rows, res)
+                onDone(rows, res, req)
             }
         })
 
