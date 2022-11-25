@@ -5,7 +5,8 @@ const common = {
     TOKEN: 'token',
     SIGN_OUT: 'sucessfully signout',
     HASH_ALGO: 'sha256',
-    HASH_DIGEST: 'hex'
+    HASH_DIGEST: 'hex',
+    NOT_NUMBER: 'Input is Not a number'
 }
 
 module.exports = common;

@@ -1,26 +1,11 @@
 const { buildPassword } = require('../helpers/password');
 const executeAPI = require('../database/exFunction');
-const { ok, badReq, unAuth } = require('../helpers/httpcodes');
+const { unAuth, forbidden } = require('../helpers/httpcodes');
 const validators = require('../helpers/validators');
 const jwt = require('jsonwebtoken');
 const common = require('../helpers/common');
 const { expressjwt } = require('express-jwt')
-
-const onDone = (rows, res) => {
-    res.status(ok.code).json({
-        status: ok.status,
-        message: ok.message,
-        data: rows
-    })
-}
-
-const onError = (err, res) => {
-    res.status(badReq.code).json({
-        status: badReq.status,
-        message: badReq.message,
-        err: err.message || err[0].message
-    })
-}
+const { onDone, onError } = require('../helpers/response')
 
 const onCreatingUser = (rows, res) => {
     const { isCreated } = rows[0];
@@ -89,7 +74,7 @@ exports.signOut = (req, res) => {
 }
 
 // expressjwt middleware
-exports.isSignedin = expressjwt({
+exports.isSignedIn = expressjwt({
     secret: process.env.TOKEN_SECRECT,
     algorithms: ['HS256']
 })
