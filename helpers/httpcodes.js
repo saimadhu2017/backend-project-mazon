@@ -18,6 +18,16 @@ const httpcodes = {
         code: 400,
         message: 'Bad Request',
         status: 'fail'
+    },
+    unAuth:{
+        code: 401,
+        message: 'unauthorized please signIn',
+        status: 'fail'
+    },
+    forbidden:{
+        code: 403,
+        message: `Forbidden, you don't have right access to view`,
+        status: 'fail'
     }
 }
 

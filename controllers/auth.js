@@ -1,6 +1,6 @@
 const { buildPassword } = require('../helpers/password');
 const executeAPI = require('../database/exFunction');
-const { ok, badReq } = require('../helpers/httpcodes');
+const { ok, badReq, unAuth } = require('../helpers/httpcodes');
 const validators = require('../helpers/validators');
 const jwt = require('jsonwebtoken');
 const common = require('../helpers/common');
@@ -56,12 +56,6 @@ const onMailFound = (rows, res, req) => {
     onError(err, res)
 }
 
-exports.isSignedin = expressjwt({
-    secret: process.env.TOKEN_SECRECT,
-    algorithms: ['HS256'],
-    userProperty: 'auth'
-})
-
 exports.signUp = (req, res) => {
     const valid = validators.validateUser(req.body);
     if (valid.error) {
@@ -92,4 +86,39 @@ exports.signIn = (req, res) => {
 exports.signOut = (req, res) => {
     res.clearCookie(common.TOKEN);
     onDone({ message: common.SIGN_OUT }, res)
+}
+
+// expressjwt middleware
+exports.isSignedin = expressjwt({
+    secret: process.env.TOKEN_SECRECT,
+    algorithms: ['HS256']
+})
+
+//custom middlewares
+exports.isAuthenticated = (req, res, next) => {
+    const check = req.paramAuth?.mail && req.auth?.mail && (req.paramAuth.mail === req.auth.mail);
+    if (!check) {
+        return (
+            res.status(unAuth.code).json({
+                status: unAuth.status,
+                message: unAuth.message,
+                err: unAuth.message
+            })
+        );
+    }
+    next();
+}
+
+exports.isAdmin = (req, res, next) => {
+    if (req.paramAuth?.role === 1) {
+        next();
+        return;
+    }
+    return (
+        res.status(forbidden.code).json({
+            status: forbidden.status,
+            message: forbidden.message,
+            err: forbidden.message
+        })
+    );
 }
