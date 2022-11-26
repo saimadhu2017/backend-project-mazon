@@ -82,7 +82,7 @@ exports.isSignedIn = expressjwt({
 //custom middlewares
 exports.isAuthenticated = (req, res, next) => {
     const check = req.paramAuth?.mail && req.auth?.mail && (req.paramAuth.mail === req.auth.mail);
-    if (!check) {
+    if (!(check && (req.headers?.authorization === `Bearer ${req.cookies?.token}`))) {
         return (
             res.status(unAuth.code).json({
                 status: unAuth.status,
