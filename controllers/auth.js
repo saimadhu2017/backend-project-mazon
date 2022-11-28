@@ -18,7 +18,7 @@ const onCreatingUser = (rows, res) => {
 }
 
 const onMailFound = (rows, res, req) => {
-    const { isMailThere, salt: userSalt, encry_password } = rows[0];
+    const { isMailThere, salt: userSalt, encry_password, id } = rows[0];
     if (isMailThere) {
         const { password: userPassword, mail } = req.body;
         const { password: newEncrypassword } = buildPassword(userPassword, userSalt);
@@ -27,7 +27,8 @@ const onMailFound = (rows, res, req) => {
             res.cookie(common.TOKEN, token, { maxAge: 60000 })
             const finData = {
                 token,
-                mail
+                mail,
+                id
             }
             onDone(finData, res);
         }
@@ -52,7 +53,7 @@ exports.signUp = (req, res) => {
             ...buildPassword(req.body.password)
         }
         const sql = `EXEC users.sp_signup_user '${user.first_name}','${user.last_name}',
-        '${user.mail}','${user.phone}','${user.password}','${user.salt}'`;
+        '${user.mail}','${user.phone}','${user.password}','${user.salt}',${user.role || common.DEF_USER_ROLE}`;
         executeAPI(sql, onCreatingUser, onError, res);
     }
 }

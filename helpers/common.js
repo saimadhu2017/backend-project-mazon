@@ -6,7 +6,9 @@ const common = {
     SIGN_OUT: 'sucessfully signout',
     HASH_ALGO: 'sha256',
     HASH_DIGEST: 'hex',
-    NOT_NUMBER: 'Input is Not a number'
+    NOT_NUMBER: 'Input is Not a number',
+    DEF_USER_ROLE: 0,
+    SHOP_THERE:`shop is already there we can't create another shop with same name or mail`
 }
 
 module.exports = common;
