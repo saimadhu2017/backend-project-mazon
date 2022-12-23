@@ -8,7 +8,9 @@ const common = {
     HASH_DIGEST: 'hex',
     NOT_NUMBER: 'Input is Not a number',
     DEF_USER_ROLE: 0,
-    SHOP_THERE:`shop is already there we can't create another shop with same name or mail`
+    SHOP_THERE: `shop is already there we can't create another shop with same name or mail`,
+    SUCCESS_STATUS: 'success',
+    FAIL_STATUS: 'fail'
 }
 
 module.exports = common;
