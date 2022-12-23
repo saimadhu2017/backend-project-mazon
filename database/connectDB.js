@@ -9,7 +9,8 @@ const connectDB = (callback, res) => {
             if (err) {
                 res.status(internalServErr.code).json({
                     status: internalServErr.status,
-                    message: internalServErr.message
+                    message: internalServErr.message,
+                    err: internalServErr.message
                 })
             }
             else {
@@ -20,7 +21,8 @@ const connectDB = (callback, res) => {
     } catch (error) {
         res.status(unavailable.code).json({
             status: unavailable.status,
-            message: unavailable.message
+            message: unavailable.message,
+            err: unavailable.message
         })
     }
 }
