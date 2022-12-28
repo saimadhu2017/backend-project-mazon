@@ -20,7 +20,7 @@ const onCreatingUser = (rows, res) => {
 const onMailFound = (rows, res, req) => {
     const { isMailThere, salt: userSalt, encry_password, id } = rows[0];
     if (isMailThere) {
-        const { password: userPassword, mail } = req.body;
+        const { password: userPassword, mail } = req.query;
         const { password: newEncrypassword } = buildPassword(userPassword, userSalt);
         if (newEncrypassword === encry_password) {
             const token = jwt.sign({ mail: mail }, process.env.TOKEN_SECRECT);
@@ -59,12 +59,12 @@ exports.signUp = (req, res) => {
 }
 
 exports.signIn = (req, res) => {
-    const valid = validators.validateSignInUser(req.body);
+    const valid = validators.validateSignInUser(req.query);
     if (valid.error) {
         onError(valid.error.details, res)
     }
     else {
-        const sql = `SELECT * from users.fn_checkUserEmailPresent('${req.body.mail}')`;
+        const sql = `SELECT * from users.fn_checkUserEmailPresent('${req.query.mail}')`;
         executeAPI(sql, onMailFound, onError, res, req);
     }
 }
