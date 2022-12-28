@@ -1,6 +1,6 @@
 const common = {
     MAIL_NOT_FOUND: 'Mail not found please sign Up',
-    PASS_NOT_MATCH: 'Password not Matched please enter correct password',
+    PASS_NOT_MATCH: 'Password is incorrect please enter correct one',
     USER_THERE: 'Sorry your account is already created please signIn',
     TOKEN: 'token',
     SIGN_OUT: 'sucessfully signout',
