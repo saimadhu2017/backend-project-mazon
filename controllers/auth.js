@@ -1,6 +1,6 @@
 const { buildPassword } = require('../helpers/password');
 const executeAPI = require('../database/exFunction');
-const { unAuth, forbidden } = require('../helpers/httpcodes');
+const { unAuth, forbidden, ok } = require('../helpers/httpcodes');
 const validators = require('../helpers/validators');
 const jwt = require('jsonwebtoken');
 const common = require('../helpers/common');
@@ -74,6 +74,15 @@ exports.signOut = (req, res) => {
     onDone({ message: common.SIGN_OUT }, res)
 }
 
+exports.userLoginValidation = (req, res) => {
+    req.paramAuth = undefined;
+    res.status(ok.code).json({
+        status: ok.status,
+        message: ok.message,
+        data: []
+    })
+}
+
 // expressjwt middleware
 exports.isSignedIn = expressjwt({
     secret: process.env.TOKEN_SECRECT,
@@ -83,7 +92,7 @@ exports.isSignedIn = expressjwt({
 //custom middlewares
 exports.isAuthenticated = (req, res, next) => {
     const check = req.paramAuth?.mail && req.auth?.mail && (req.paramAuth.mail === req.auth.mail);
-    if (!(check && (req.headers?.authorization === `Bearer ${req.cookies?.token}`))) {
+    if (!check) {
         return (
             res.status(unAuth.code).json({
                 status: unAuth.status,
